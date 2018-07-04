@@ -12,6 +12,7 @@ namespace DevDebts
     public class Program
     {
         static Bank theBank = Bank.Load();
+        
 
         public static void Main(string[] args)
         {
@@ -45,6 +46,11 @@ namespace DevDebts
                     Console.WriteLine("nerd");
                     continue;
                 }
+                if (input == "this is so sad")
+                {
+                    Console.WriteLine("alexa play despicito");
+                    continue;
+                }
                 if (input == "UwU")
                 {
                     Console.WriteLine("Get Out");
@@ -55,7 +61,6 @@ namespace DevDebts
                     PrintNames(names);
                     continue;
                 }
-
 
                 if (input == "help")
                 {
