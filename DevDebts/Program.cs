@@ -1,25 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DemoLibrary;
+using Newtonsoft.Json;
 
 namespace DevDebts
 {
     public class Program
     {
-        static List<Account> theBank = new List<Account>();
+        static Bank theBank = Bank.Load();
 
         public static void Main(string[] args)
         {
             //"llwyd owes alan £4.99 for subway"
             //"llwyd gave alan £2"
-            List<string> names = new List<string>();
-            names.Add("llwyd");
-            names.Add("tom");
-            names.Add("matt");
-            names.Add("alan");
+            List<string> names;
+            
+
+            string data = File.ReadAllText("names.txt");
+            names = JsonConvert.DeserializeObject<List<string>>(data);
 
             List<string> actions = new List<string>();
             actions.Add("owes");
@@ -57,6 +59,7 @@ namespace DevDebts
                     Console.WriteLine("printnames - Print Avalible Names");
                     Console.WriteLine("hello world - :)");
                     Console.WriteLine("show all- show all debts");
+                    Console.WriteLine("clear- clears the console");
                     continue;
                 }
 
@@ -73,8 +76,7 @@ namespace DevDebts
                     if (parameters[0] == "adduser")
                     {
                         names.Add(parameters[1]);
-
-
+                        continue;
                     }
                 }
 
@@ -131,7 +133,9 @@ namespace DevDebts
                 TheThing(payerNames, parameters[2], parameters[1], amount);
 
             } while (input != "exit");
-
+            theBank.Save();
+            string namedata = JsonConvert.SerializeObject(names);
+            File.WriteAllText("names.txt", namedata);
         }
 
         public static bool IsValidName(string nameToCheck, List<string> validNames)
@@ -177,7 +181,7 @@ namespace DevDebts
         {
             foreach (string payer in payers)
             {
-                Account account = GetOrAddAccount(payer, theBank);
+                Account account = GetOrAddAccount(payer, theBank.Accounts);
                 bool hasExistingDebt = account.Debts.ContainsKey(recipiant);
 
                 if (!hasExistingDebt)
@@ -230,7 +234,7 @@ namespace DevDebts
         public static void PrintAll()
         {
 
-            foreach (Account account in theBank)
+            foreach (Account account in theBank.Accounts)
             {
                 Console.WriteLine(account.Owner);
                 foreach (var debt in account.Debts)
