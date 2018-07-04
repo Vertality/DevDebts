@@ -45,7 +45,11 @@ namespace DevDebts
                     Console.WriteLine("nerd");
                     continue;
                 }
-
+                if (input == "UwU")
+                {
+                    Console.WriteLine("Get Out");
+                    continue;
+                }
                 if (input == "printnames")
                 {
                     PrintNames(names);
